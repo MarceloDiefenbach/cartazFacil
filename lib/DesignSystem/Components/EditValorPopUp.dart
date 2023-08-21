@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class EditValorPopUp extends StatefulWidget {
-  Product produto;
+  ProductModel produto;
 
   EditValorPopUp(this.produto);
 
@@ -21,7 +21,7 @@ class _EditValorPopUpState extends State<EditValorPopUp> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    valorFieldController = TextEditingController(text: widget.produto.valor);
+    valorFieldController = TextEditingController(text: widget.produto.value);
   }
   @override
   Widget build(BuildContext context) {
@@ -136,8 +136,8 @@ class _EditValorPopUpState extends State<EditValorPopUp> {
                             ),
                             onTap: (){
                               print(valorFieldController.text);
-                              widget.produto.valor = valorFieldController.text;
-                              if(widget.produto.valor.length > 3 && widget.produto.valor.length < 6){
+                              widget.produto.value = valorFieldController.text;
+                              if(widget.produto.value.length > 3 && widget.produto.value.length < 6){
                                 Navigator.pushReplacementNamed(
                                   context,
                                   '/cartaz',

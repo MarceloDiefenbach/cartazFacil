@@ -18,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
 
-    Timer(Duration(seconds: 2), () {
+    Timer(Duration(seconds: 3), () {
       Navigator.pushNamedAndRemoveUntil(context, "/", (route) => false);
     });
   }

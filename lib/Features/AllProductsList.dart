@@ -16,7 +16,7 @@ class AllProductsList extends StatefulWidget {
 class _AllProductsListState extends State<AllProductsList> {
   String _searchQuery = '';
 
-  editValor(Product produto) {
+  editValor(ProductModel produto) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -123,7 +123,7 @@ class _AllProductsListState extends State<AllProductsList> {
                               ),
                             ),
                             onTap: () {
-                              produto.valor = "";
+                              produto.value = "";
                               editValor(produto);
                             },
                           );
