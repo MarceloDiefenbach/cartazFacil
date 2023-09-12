@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:cartazfacil/AdMob/AdHelper.dart';
 import 'package:cartazfacil/DesignSystem/Components/CFButton.dart';
 import 'package:cartazfacil/DesignSystem/Tokens/Font.dart';
 import 'package:cartazfacil/Model/Product.dart';
@@ -7,12 +8,13 @@ import 'package:cartazfacil/Service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'dart:ui' as ui;
 
 class CartazView extends StatefulWidget {
-  Product product;
+  ProductModel product;
 
   CartazView(this.product);
 
@@ -24,14 +26,34 @@ class _CartazViewState extends State<CartazView> {
 
   String price = "";
 
+  BannerAd? _bannerAd;
+
   @override
   void initState() {
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final productViewModel = Provider.of<Service>(context, listen: false);
       if (!productViewModel.isLoaded) {
         productViewModel.getProducts();
       }
     });
+
+    BannerAd(
+      adUnitId: AdHelper.encarteBanner,
+      request: AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          setState(() {
+            _bannerAd = ad as BannerAd;
+          });
+        },
+        onAdFailedToLoad: (ad, err) {
+          print('Failed to load a banner ad: ${err.message}');
+          ad.dispose();
+        },
+      ),
+    ).load();
   }
 
   saveImageAndShowDialog() {
@@ -96,6 +118,12 @@ class _CartazViewState extends State<CartazView> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  if (_bannerAd != null)
+                    Container(
+                      width: _bannerAd!.size.width.toDouble(),
+                      height: _bannerAd!.size.height.toDouble(),
+                      child: AdWidget(ad: _bannerAd!),
+                    ),
                   RepaintBoundary(
                     key: _containerKey,
                     child: Container(
@@ -124,7 +152,7 @@ class _CartazViewState extends State<CartazView> {
                                   Text("R\$", style: Fonts.cartazMoneySymbol),
                                   SizedBox(width: cartazWidth * 0.02),
                                   Text(
-                                    widget.product.valor,
+                                    widget.product.value,
                                     style: Fonts.cartazPrice,
                                   ),
                                 ],

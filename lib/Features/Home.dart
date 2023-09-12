@@ -1,12 +1,14 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:cartazfacil/AdMob/AdHelper.dart';
 import 'package:cartazfacil/DesignSystem/Components/CFButton.dart';
 import 'package:cartazfacil/DesignSystem/Tokens/Font.dart';
 import 'package:cartazfacil/Service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'dart:ui' as ui;
 
@@ -21,6 +23,7 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
 
   String price = "";
+  BannerAd? _bannerAd;
 
   @override
   void initState() {
@@ -30,6 +33,23 @@ class _HomeViewState extends State<HomeView> {
         productViewModel.getProducts();
       }
     });
+
+    BannerAd(
+      adUnitId: AdHelper.homeBanner,
+      request: AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          setState(() {
+            _bannerAd = ad as BannerAd;
+          });
+        },
+        onAdFailedToLoad: (ad, err) {
+          print('Failed to load a banner ad: ${err.message}');
+          ad.dispose();
+        },
+      ),
+    ).load();
   }
 
   void openWebsite(String url) async {
@@ -94,6 +114,15 @@ class _HomeViewState extends State<HomeView> {
                 ],
               ),
             ),
+            if (_bannerAd != null)
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  width: _bannerAd!.size.width.toDouble(),
+                  height: _bannerAd!.size.height.toDouble(),
+                  child: AdWidget(ad: _bannerAd!),
+                ),
+              ),
           ],
         ),
       ),
