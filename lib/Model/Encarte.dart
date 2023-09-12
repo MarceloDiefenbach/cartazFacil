@@ -3,7 +3,7 @@ import 'package:cartazfacil/Model/Product.dart';
 class Encarte {
   final String name;
   String validade;
-  List<Product> produtos;
+  List<ProductModel> produtos;
   final String tema;
   final String topo;
   String textColor;
@@ -23,7 +23,7 @@ class Encarte {
 
   factory Encarte.fromJson(Map<String, dynamic> json) {
     var productList = json['produtos'] as List;
-    List<Product> products = productList.map((i) => Product.fromJson(i)).toList();
+    List<ProductModel> products = productList.map((i) => ProductModel.fromJson(i)).toList();
 
     return Encarte(
       name: json['name'] as String,
@@ -48,7 +48,7 @@ class Encarte {
     'priceTextColor': priceTextColor,
   };
 
-  void reorderProducts(List<Product> reorderedProducts) {
+  void reorderProducts(List<ProductModel> reorderedProducts) {
     produtos.clear();
     produtos.addAll(reorderedProducts);
   }
