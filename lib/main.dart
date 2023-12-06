@@ -1,9 +1,9 @@
-import 'package:cartazfacil/Features/AllProductsList.dart';
-import 'package:cartazfacil/Features/Cartaz/CartazView.dart';
-import 'package:cartazfacil/Features/Home.dart';
-import 'package:cartazfacil/Initial/SplashScreen.dart';
-import 'package:cartazfacil/Model/Product.dart';
-import 'package:cartazfacil/Service.dart';
+import 'package:cartazrapido/Features/AllProductsList.dart';
+import 'package:cartazrapido/Features/Cartaz/CartazView.dart';
+import 'package:cartazrapido/Features/Home.dart';
+import 'package:cartazrapido/Initial/SplashScreen.dart';
+import 'package:cartazrapido/Model/Product.dart';
+import 'package:cartazrapido/Service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'Cartaz Fácil',
+        title: 'Cartaz Rápido',
         initialRoute: '/splash',
         routes: {
           '/splash': (context) => SplashScreen(),

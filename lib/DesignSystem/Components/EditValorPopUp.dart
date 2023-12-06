@@ -1,6 +1,6 @@
-import 'package:cartazfacil/DesignSystem/DesignTokens.dart';
-import 'package:cartazfacil/Model/Product.dart';
-import 'package:cartazfacil/Service.dart';
+import 'package:cartazrapido/DesignSystem/DesignTokens.dart';
+import 'package:cartazrapido/Model/Product.dart';
+import 'package:cartazrapido/Service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

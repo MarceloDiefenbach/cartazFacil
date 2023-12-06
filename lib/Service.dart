@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:cartazfacil/Model/Encarte.dart';
-import 'package:cartazfacil/Model/Product.dart';
+import 'package:cartazrapido/Model/Encarte.dart';
+import 'package:cartazrapido/Model/Product.dart';
 import 'package:flutter/material.dart';
 
 class Service extends ChangeNotifier {

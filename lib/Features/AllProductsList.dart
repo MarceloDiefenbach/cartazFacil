@@ -1,8 +1,8 @@
-import 'package:cartazfacil/AdMob/AdHelper.dart';
-import 'package:cartazfacil/DesignSystem/Components/EditValorPopUp.dart';
-import 'package:cartazfacil/DesignSystem/Components/NavigationBackButton.dart';
-import 'package:cartazfacil/Model/Product.dart';
-import 'package:cartazfacil/Service.dart';
+import 'package:cartazrapido/AdMob/AdHelper.dart';
+import 'package:cartazrapido/DesignSystem/Components/EditValorPopUp.dart';
+import 'package:cartazrapido/DesignSystem/Components/NavigationBackButton.dart';
+import 'package:cartazrapido/Model/Product.dart';
+import 'package:cartazrapido/Service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';

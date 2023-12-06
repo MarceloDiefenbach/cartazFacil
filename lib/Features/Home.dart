@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:cartazfacil/AdMob/AdHelper.dart';
-import 'package:cartazfacil/DesignSystem/Components/CFButton.dart';
-import 'package:cartazfacil/DesignSystem/Tokens/Font.dart';
-import 'package:cartazfacil/Service.dart';
+import 'package:cartazrapido/AdMob/AdHelper.dart';
+import 'package:cartazrapido/DesignSystem/Components/CFButton.dart';
+import 'package:cartazrapido/DesignSystem/Tokens/Font.dart';
+import 'package:cartazrapido/Service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';

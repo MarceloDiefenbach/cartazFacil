@@ -1,5 +1,5 @@
-import 'package:cartazfacil/DesignSystem/DesignTokens.dart';
-import 'package:cartazfacil/DesignSystem/Tokens/Font.dart';
+import 'package:cartazrapido/DesignSystem/DesignTokens.dart';
+import 'package:cartazrapido/DesignSystem/Tokens/Font.dart';
 import 'package:flutter/material.dart';
 
 class CFButton extends StatefulWidget {

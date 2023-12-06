@@ -1,4 +1,4 @@
-import 'package:cartazfacil/Model/Product.dart';
+import 'package:cartazrapido/Model/Product.dart';
 
 class Encarte {
   final String name;
