@@ -26,7 +26,7 @@ class Service extends ChangeNotifier {
   Future<void> getProducts() async {
     try {
       http.Response response = await http.get(
-        Uri.parse('https://gpt-treinador.herokuapp.com/api/items'),
+        Uri.parse('https://only-cariotta-encarte-3a41d606.koyeb.app/nova/api/items'),
         headers: {'Content-Type': 'application/json'},
       );
 
