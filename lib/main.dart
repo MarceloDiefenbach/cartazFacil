@@ -1,9 +1,8 @@
-import 'package:cartazrapido/Features/AllProductsList.dart';
 import 'package:cartazrapido/Features/Cartaz/CartazView.dart';
 import 'package:cartazrapido/Features/Home.dart';
 import 'package:cartazrapido/Initial/SplashScreen.dart';
-import 'package:cartazrapido/Model/Product.dart';
 import 'package:cartazrapido/Service.dart';
+import 'package:cartazrapido/routes_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
@@ -22,21 +21,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<Service>(
-          create: (_) => Service(),
+        ChangeNotifierProvider<ManagerEncarte>(
+          create: (_) => ManagerEncarte(),
         ),
       ],
       child: MaterialApp(
         title: 'Cartaz Rápido',
-        initialRoute: '/splash',
+        initialRoute: AppRoute.splash.path,
         routes: {
-          '/splash': (context) => SplashScreen(),
-          '/': (context) => HomeView(),
-          '/list': (context) => AllProductsList(),
-          '/cartaz': (context) {
-            final product = ModalRoute.of(context)?.settings.arguments as ProductModel;
-            return CartazView(product);
-          },
+          AppRoute.splash.path: (context) => SplashScreen(),
+          AppRoute.home.path: (context) => HomeView(),
+          AppRoute.cartaz.path: (context) => CartazView(),
         },
         debugShowCheckedModeBanner: false,
       ),

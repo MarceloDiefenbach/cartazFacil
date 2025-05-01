@@ -1,9 +1,6 @@
 import 'dart:async';
-import 'package:cartazrapido/DesignSystem/DesignTokens.dart';
-import 'package:cartazrapido/Service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {
 
@@ -15,7 +12,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void didChangeDependencies() async {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
 
     Timer(Duration(seconds: 3), () {
@@ -25,13 +21,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-    final productViewModel = Provider.of<Service>(context);
-    productViewModel.getProducts();
-
     return Material(
       child: Container(
-        color: colorBrandPrimary(),
+        color: Colors.red,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -43,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
             Padding(
               padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
-              child: Text("Carregando\nsuas informações",
+              child: Text("Cartaz Rápido",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontWeight: FontWeight.w500,
