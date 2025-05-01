@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cartazrapido/routes_enum.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.didChangeDependencies();
 
     Timer(Duration(seconds: 3), () {
-      Navigator.pushNamedAndRemoveUntil(context, "/", (route) => false);
+      Navigator.pushNamedAndRemoveUntil(context, AppRoute.home.path, (route) => false);
     });
   }
 

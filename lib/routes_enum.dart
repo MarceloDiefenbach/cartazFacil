@@ -12,7 +12,7 @@ extension AppRouteExtension on AppRoute {
       case AppRoute.home:
         return '/';
       case AppRoute.cartaz:
-        return '/c';
+        return '/cartaz';
     }
   }
 }

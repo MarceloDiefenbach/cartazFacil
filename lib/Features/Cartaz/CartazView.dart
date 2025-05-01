@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:cartazrapido/AdMob/AdHelper.dart';
+import 'package:cartazrapido/DesignSystem/Components/AppButton.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -9,7 +10,6 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'dart:ui' as ui;
 
 class CartazView extends StatefulWidget {
-
   CartazView();
 
   @override
@@ -17,13 +17,14 @@ class CartazView extends StatefulWidget {
 }
 
 class _CartazViewState extends State<CartazView> {
-
   String price = "";
 
   BannerAd? _bannerAd;
 
   @override
   void initState() {
+    super.initState();
+
     BannerAd(
       adUnitId: AdHelper.encarteBanner,
       request: AdRequest(),
@@ -66,9 +67,11 @@ class _CartazViewState extends State<CartazView> {
 
   Future<Uint8List> captureScreenshot() async {
     try {
-      RenderRepaintBoundary boundary = _containerKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+      RenderRepaintBoundary boundary = _containerKey.currentContext!
+          .findRenderObject() as RenderRepaintBoundary;
       ui.Image image = await boundary.toImage(pixelRatio: 5);
-      ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+      ByteData? byteData =
+          await image.toByteData(format: ui.ImageByteFormat.png);
       Uint8List? pngBytes = byteData?.buffer.asUint8List();
       return pngBytes!;
     } catch (e) {
@@ -89,7 +92,6 @@ class _CartazViewState extends State<CartazView> {
 
   @override
   Widget build(BuildContext context) {
-
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
@@ -110,6 +112,7 @@ class _CartazViewState extends State<CartazView> {
                       height: _bannerAd!.size.height.toDouble(),
                       child: AdWidget(ad: _bannerAd!),
                     ),
+
                   RepaintBoundary(
                     key: _containerKey,
                     child: Container(
@@ -123,63 +126,19 @@ class _CartazViewState extends State<CartazView> {
                       ),
                     ),
                   ),
-                  // Screenshot(
-                  //   controller: screenshotController,
-                  //   child: Container(
-                  //     width: cartazWidth,
-                  //     height: cartazHeight,
-                  //     color: Color(0xFFFEF100),
-                  //     child: Stack(
-                  //       children: [
-                  //         Image.asset('lib/assets/BGofertas.png'),
-                  //         Column(
-                  //           children: [
-                  //             SizedBox(height: cartazHeight*0.34),
-                  //
-                  //             Padding(
-                  //               padding: EdgeInsets.symmetric(horizontal: width * 0.04),
-                  //               child: Text(
-                  //                 widget.product.name,
-                  //                 style: Fonts.cartazProductName,
-                  //                 textAlign: TextAlign.center,
-                  //               ),
-                  //             ),
-                  //             Spacer(),
-                  //             Row(
-                  //               mainAxisAlignment: MainAxisAlignment.center,
-                  //               children: [
-                  //                 Text("R\$", style: Fonts.cartazMoneySymbol),
-                  //                 SizedBox(width: cartazWidth * 0.02),
-                  //                 Text(
-                  //                   widget.product.valor,
-                  //                   style: Fonts.cartazPrice,
-                  //                 ),
-                  //               ],
-                  //             ),
-                  //             Spacer(),
-                  //             Spacer(),
-                  //             Spacer(),
-                  //           ],
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  ElevatedButton(
-                    child: Text("Salvar na galeria"),
-                    onPressed:(){
+
+                  AppButton(
+                    text: "Salvar na galeria",
+                    onPressed: () {
                       captureScreenshot().then((screenshot) {
                         saveScreenshot(screenshot);
                       });
                     },
                   ),
-                  SizedBox(height: 8),
-                  ElevatedButton(
-                    child: Text("Montar outro cartaz"),
-                    onPressed: (){
+
+                  AppButton(
+                    text: "Montar outro cartaz",
+                    onPressed: () {
                       Navigator.pop(context);
                     },
                   ),
