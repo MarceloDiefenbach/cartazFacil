@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 import 'package:cartazrapido/AdMob/AdHelper.dart';
 import 'package:cartazrapido/DesignSystem/Components/AppButtonIconText.dart';
 import 'package:cartazrapido/DesignSystem/DesingSystem.dart';
+import 'package:cartazrapido/DesignSystem/Overlays/TextChangeOverlay.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -312,12 +313,12 @@ class _CartazViewState extends State<CartazView> {
                   AppButtonIcon(
                       icon: Icons.edit,
                       onPressed: () {
-                        viewModel.editText();
+                        viewModel.showTextChangeOverlay();
                       }),
                   AppButtonIcon(
                       icon: Icons.color_lens_outlined,
                       onPressed: () {
-                        // viewModel.editText();
+                        viewModel.showColorWheelPicker();
                       }),
                   AppButtonIcon(
                       icon: Icons.text_increase,
@@ -368,10 +369,20 @@ class _CartazViewState extends State<CartazView> {
                 viewModel.closeColorWheelPicker();
               },
               onColorChanged: (color) {
-                viewModel.setBackgroundColor(color);
+                viewModel.setColor(color);
                 viewModel.closeColorWheelPicker();
              }
           ),
+
+          if (viewModel.showTextChange)
+            TextChangeOverlay(
+                initialText: viewModel.getCurrentText(),
+                onConfirm: (text) {
+                  viewModel.setNewText(text);
+                },
+                onCancel: () {
+                  viewModel.closeTextChangeOverlay();
+                })
 
         ],
       ),

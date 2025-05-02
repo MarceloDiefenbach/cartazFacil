@@ -23,7 +23,8 @@ class CartazViewModel extends ChangeNotifier {
   bool _showColorWheel = false;
   bool get showColorWheel => _showColorWheel;
 
-
+  bool _showTextChange = false;
+  bool get showTextChange => _showTextChange;
 
   int? _selectedLineIndex;
   int? get selectedLineIndex => _selectedLineIndex;
@@ -64,7 +65,6 @@ class CartazViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-
   void showColorWheelPicker() {
     _showProportions = false;
     _showColorWheel = true;
@@ -97,8 +97,46 @@ class CartazViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setColor(String color) {
+    if (checkExistIndex()) {
+      content[_selectedLineIndex!].color = color;
+      notifyListeners();
+    } else {
+      setBackgroundColor(color);
+    }
+  }
   void setBackgroundColor(String color) {
     model.backgroundColor = color;
+    notifyListeners();
+  }
+
+  void showTextChangeOverlay() {
+    _showTextChange = true;
+    notifyListeners();
+  }
+
+  void closeTextChangeOverlay() {
+    _showTextChange = false;
+    notifyListeners();
+  }
+
+  String getCurrentText() {
+    if (checkExistIndex()) {
+      return content[_selectedLineIndex!].text;
+    } else if (checkExistTitle()) {
+      return title.text;
+    } else {
+      return "";
+    }
+  }
+
+  void setNewText(String text) {
+    if (checkExistIndex()) {
+      content[_selectedLineIndex!].text = text;
+    } else if (checkExistTitle()) {
+      title.text = text;
+    }
+
     notifyListeners();
   }
 
@@ -165,10 +203,6 @@ class CartazViewModel extends ChangeNotifier {
       _showToolbar = false;
       notifyListeners();
     }
-  }
-
-  void editText() {
-
   }
 
   void changeBold() {
