@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import '../DesingSystem.dart';
 
 class VerticalToolbar extends StatelessWidget {
+  final List<Widget> buttons;
+
   const VerticalToolbar({
-    Key? key }) : super(key: key);
+    Key? key,
+    required this.buttons,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,27 +20,22 @@ class VerticalToolbar extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withAlpha(100), // sombra leve
-            blurRadius: 30,
+            color: Colors.black.withAlpha(100),
+            blurRadius: 40,
             offset: Offset(-10, 0),
           ),
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(AppPadding.s3),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: [
-            AppButtonIcon(icon: Icons.ice_skating, onPressed: () {
-
-            }),
-            AppButtonIcon(icon: Icons.face, onPressed: () {
-
-            }),
-            AppButtonIcon(icon: Icons.text_decrease, onPressed: () {
-
-            }),
-          ],
+          children: List.generate(
+            buttons.length * 2 - 1,
+            (index) => index.isEven
+                ? buttons[index ~/ 2]
+                : const SizedBox(height: AppPadding.s3), // seu espaçamento aqui
+          ),
         ),
       ),
     );

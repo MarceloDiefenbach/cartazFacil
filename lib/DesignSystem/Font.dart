@@ -2,6 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:cartazrapido/DesignSystem/DesingSystem.dart';
 
 class AppFonts {
+
+  /// Custom (permite definir tudo)
+  static TextStyle custom({
+    required double size,
+    Color? color,
+    FontWeight weight = FontWeight.w400,
+    double height = 1.2,
+    double letterSpacing = 0.0,
+    String? fontFamily,
+    TextDecoration? decoration,
+  }) =>
+      TextStyle(
+        fontSize: size,
+        fontWeight: weight,
+        color: color ?? AppColors.text,
+        height: height,
+        letterSpacing: letterSpacing,
+        fontFamily: fontFamily,
+        decoration: decoration,
+      );
+
   /// Large Title (34pt)
   static TextStyle largeTitle({
     Color? color,

@@ -1,7 +1,7 @@
 import 'package:cartazrapido/Features/Cartaz/CartazView.dart';
+import 'package:cartazrapido/Features/Cartaz/CartazViewModal.dart';
 import 'package:cartazrapido/Features/Home.dart';
 import 'package:cartazrapido/Initial/SplashScreen.dart';
-import 'package:cartazrapido/Model/CartazModel.dart';
 import 'package:cartazrapido/Service.dart';
 import 'package:cartazrapido/routes_enum.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +19,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<ManagerEncarte>(
           create: (_) => ManagerEncarte(),
         ),
+        ChangeNotifierProvider<CartazViewModel>(
+          create: (_) => CartazViewModel(),
+        ),
       ],
       child: MaterialApp(
         title: 'Cartaz Rápido',
@@ -26,7 +29,7 @@ class MyApp extends StatelessWidget {
         routes: {
           AppRoute.splash.path: (context) => SplashScreen(),
           AppRoute.home.path: (context) => HomeView(),
-          AppRoute.cartaz.path: (context) => CartazView(cartaz: CartazModel(title: "TESTE", hexColor: "#FF0000"),),
+          AppRoute.cartaz.path: (context) => CartazView(),
         },
         debugShowCheckedModeBanner: false,
       ),

@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:cartazrapido/DesignSystem/DesingSystem.dart';
 
-class AppButtonIcon extends StatelessWidget {
-  final IconData icon;
+class AppButtonIconText extends StatelessWidget {
+  final String text;
   final VoidCallback onPressed;
-  final Color? color;
+  final bool isSelected;
   final bool hasBackground;
 
-
-  const AppButtonIcon({
+  const AppButtonIconText({
     super.key,
-    required this.icon,
+    required this.text,
     required this.onPressed,
-    this.color,
+    this.isSelected = false,
     this.hasBackground = true
   });
 
@@ -26,14 +25,16 @@ class AppButtonIcon extends StatelessWidget {
         decoration: BoxDecoration(
           color: hasBackground ? AppColors.buttonToolbar : Colors.transparent,
           borderRadius: BorderRadius.circular(AppBorderRadius.medium),
+          border: isSelected
+              ? Border.all(color: Colors.black, width: 2)
+              : null,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              icon,
-              color: color ?? AppColors.text, // usa valor customizado ou padrão
-              size: 30,
+            Text(
+              text,
+              style: AppFonts.headline(weight: FontWeight.w600),
             ),
           ],
         ),

@@ -10,7 +10,7 @@ extension AppRouteExtension on AppRoute {
       case AppRoute.splash:
         return '/splash';
       case AppRoute.home:
-        return '/';
+        return '/home';
       case AppRoute.cartaz:
         return '/cartaz';
     }
