@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:cartazrapido/DesignSystem/DesingSystem.dart';
 
-class AppButton extends StatelessWidget {
-  final String text;
+class AppButtonIcon extends StatelessWidget {
+  final IconData icon;
   final VoidCallback onPressed;
+  final bool isSelected;
 
-  const AppButton({
+  const AppButtonIcon({
     super.key,
-    required this.text,
+    required this.icon,
     required this.onPressed,
+    this.isSelected = false,
   });
 
   @override
@@ -16,18 +18,18 @@ class AppButton extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.primary,
-          borderRadius: BorderRadius.circular(AppBorderRadius.medium),
-        ),
+        width: 60,
+        height: 60,
         padding: const EdgeInsets.all(AppPadding.s4),
+        decoration: BoxDecoration(
+            color: isSelected ? AppColors.selectedToolbar : Colors.transparent,
+            borderRadius: BorderRadius.circular(AppBorderRadius.medium)
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              text,
-              style: AppFonts.headline(color: AppColors.textInvert),
-            ),
+            Icon(icon,
+            color: AppColors.text)
           ],
         ),
       ),

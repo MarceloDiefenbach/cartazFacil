@@ -16,6 +16,8 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   void initState() {
+    super.initState();
+
     BannerAd(
       adUnitId: AdHelper.homeBanner,
       request: AdRequest(),
@@ -40,11 +42,6 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-
-    double cartazWidth = width * 0.9;
-    double cartazHeight = cartazWidth * 1.415;
 
     return Material(
       child: SafeArea(
