@@ -137,6 +137,8 @@ class CartazViewModel extends ChangeNotifier {
       title.text = text;
     }
 
+    closeTextChangeOverlay();
+
     notifyListeners();
   }
 
@@ -191,6 +193,8 @@ class CartazViewModel extends ChangeNotifier {
 
   void addLine() {
     model.content.add(Line(text: "Teste", color: "000000", size: 30.0));
+    // _showTextChange = true;
+    // _selectedLineIndex = content.length;
     notifyListeners();
   }
 
