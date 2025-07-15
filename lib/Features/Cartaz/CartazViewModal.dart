@@ -1,46 +1,94 @@
 import 'package:flutter/material.dart';
 import 'CartazModel.dart';
+import 'Components/Background/PatternBackground.dart';
+import 'Model/LayerData.dart';
+
+enum EditMode {
+  initial,
+  editProportion,
+  editBackground,
+  editItem,
+  editColorWheel,
+  editText,
+  editStyleText,
+}
 
 class CartazViewModel extends ChangeNotifier {
   CartazViewModel();
 
+  final double step = 3.0;
   late CartazModel model = CartazModel(
-      title: Line(text: "OFERTA", color: "000000", size: 50.0, weight: FontWeight.w900),
       proportion: 1,
       backgroundColor: "30F010",
       content: [
+        Line(text: "OFERTA", color: "000000", size: 70.0, weight: FontWeight.w900, padding: [0,20,0,20]),
         Line(text: "BANANA NANICA", color: "000000", size: 25.0),
         Line(text: "De: R\$ 10,40", color: "000000", size: 17.0),
         Line(text: "Por: R\$ 3,99", color: "000000", size: 40.0, weight: FontWeight.w900),
+      ],
+      layers: [
+        LayerData(
+          color: "FF0000",
+          heightFraction: 0.2,
+          pattern: PatternBackgroundType.triangular,
+        ),
+        LayerData(
+          color: "FFFF00",
+          heightFraction: 0.4,
+          pattern: PatternBackgroundType.triangular,
+        ),
+        LayerData(
+          color: "FF0000",
+          heightFraction: 0.1,
+          pattern: PatternBackgroundType.solid,
+        ),
       ]);
 
-  bool _showToolbar = false;
-  bool get showToolbar => _showToolbar;
+  EditMode mode = EditMode.initial;
 
-  bool _showProportions = false;
-  bool get showProportions => _showProportions;
+  int? selectedLayerIndex;
+  int? selectedLineIndex;
 
-  bool _showColorWheel = false;
-  bool get showColorWheel => _showColorWheel;
-
-  bool _showTextChange = false;
-  bool get showTextChange => _showTextChange;
-
-  int? _selectedLineIndex;
-  int? get selectedLineIndex => _selectedLineIndex;
-
-  bool? _selectTitle;
-  bool? get selectTitle => _selectTitle;
-
-  Line get title => model.title;
   double get proportion => model.proportion;
   Color get backgroundColor => Color(int.parse('0xFF${model.backgroundColor}'));
   List<Line> get content => model.content;
+  List<LayerData> get layers => model.layers;
 
 
   void initModel(CartazModel newModel) {
     model = newModel;
     notifyListeners();
+  }
+
+  bool isModeEqual(EditMode value) {
+    if (value == EditMode.editStyleText) {
+      return selectedLineIndex != null;
+    }
+    return mode == value;
+  }
+
+  bool isLayerSelected() {
+    return (selectedLayerIndex != null && selectedLayerIndex! < layers.length);
+  }
+
+  bool isTextLayerSelected() {
+    return (selectedLineIndex != null && selectedLineIndex! < content.length);
+  }
+
+  bool menuBottomIsOpen() {
+    return mode == EditMode.initial || mode == EditMode.editProportion;
+  }
+
+  bool menuRightIsOpen() {
+    return mode == EditMode.editBackground || mode == EditMode.editItem || mode == EditMode.editStyleText;
+  }
+
+  bool colorWheelIsOpen() {
+    return mode == EditMode.editColorWheel;
+  }
+
+  bool editTextIsOpen() {
+    return mode == EditMode.editText;
   }
 
   Size calculateCartazSize(Size screenSize) {
@@ -59,26 +107,91 @@ class CartazViewModel extends ChangeNotifier {
     return Size(width, height);
   }
 
-  void toggleToolbar([bool? force]) {
-    _showToolbar = force ?? !_showToolbar;
-    if (_showToolbar) _showProportions = false;
+  void showColorWheelPicker() {
+    if (isLayerSelected() || isTextLayerSelected()) {
+      mode = EditMode.editColorWheel;
+    }
     notifyListeners();
   }
 
-  void showColorWheelPicker() {
-    _showProportions = false;
-    _showColorWheel = true;
+  void closeEditText() {
+    mode = EditMode.initial;
+    selectedLineIndex = null;
     notifyListeners();
   }
 
   void closeColorWheelPicker() {
-    _showProportions = false;
-    _showColorWheel = false;
+    if (isTextLayerSelected()) {
+      mode = EditMode.editStyleText;
+    } else {
+      mode = EditMode.editBackground;
+    }
+    notifyListeners();
+  }
+
+  void setToEditBackground() {
+    mode = EditMode.editBackground;
+    selectedLayerIndex = 0;
+    notifyListeners();
+  }
+
+  void layerSelected(int? index) {
+
+    if (selectedLayerIndex != null) {
+      selectedLayerIndex = null;
+    } else {
+      selectedLayerIndex = index;
+    }
+
+    notifyListeners();
+  }
+
+  void changeShapeLayer() {
+    if (selectedLayerIndex != null) {
+      final current = layers[selectedLayerIndex!].pattern;
+
+      final allPatterns = PatternBackgroundType.values;
+      final currentIndex = allPatterns.indexOf(current);
+      final nextIndex = (currentIndex + 1) % allPatterns.length;
+      final nextPattern = allPatterns[nextIndex];
+
+      layers[selectedLayerIndex!].pattern = nextPattern;
+      notifyListeners();
+    }
+  }
+
+  void setProportionRules(List<double> values) {
+    values.sort();
+
+    List<double> newFractions = [];
+    double previous = 0.0;
+
+    for (double position in values) {
+      newFractions.add(position - previous);
+      previous = position;
+    }
+    newFractions.add(1.0 - previous); // último segmento
+
+    if (newFractions.length != layers.length) {
+      throw Exception('Número de frações não bate com o número de layers.');
+    }
+
+    //aqui n ta funcionando parece
+    for (int i = 0; i < layers.length; i++) {
+      layers[i].heightFraction = newFractions[i];
+    }
+
+    notifyListeners();
+  }
+
+  void closeProportionRules() {
+    selectedLayerIndex = null;
+    mode = EditMode.initial;
     notifyListeners();
   }
 
   void showProportionsValues() {
-    _showProportions = true;
+    mode = EditMode.editProportion;
     notifyListeners();
   }
 
@@ -86,55 +199,47 @@ class CartazViewModel extends ChangeNotifier {
     return value == model.proportion;
   }
 
-
   void setProportions(double value) {
     model.proportion = value;
     notifyListeners();
   }
 
   void closeProportions() {
-    _showProportions = false;
+    mode = EditMode.initial;
     notifyListeners();
   }
 
   void setColor(String color) {
-    if (checkExistIndex()) {
-      content[_selectedLineIndex!].color = color;
+    if (isTextLayerSelected()) {
+      content[selectedLineIndex!].color = color;
       notifyListeners();
-    } else {
-      setBackgroundColor(color);
+    } else if (selectedLayerIndex != null) {
+      notifyListeners();
+      layers[selectedLayerIndex!].color = color;
     }
-  }
-  void setBackgroundColor(String color) {
-    model.backgroundColor = color;
-    notifyListeners();
   }
 
   void showTextChangeOverlay() {
-    _showTextChange = true;
+    mode = EditMode.editText;
     notifyListeners();
   }
 
   void closeTextChangeOverlay() {
-    _showTextChange = false;
+    mode = EditMode.initial;
     notifyListeners();
   }
 
   String getCurrentText() {
-    if (checkExistIndex()) {
-      return content[_selectedLineIndex!].text;
-    } else if (checkExistTitle()) {
-      return title.text;
+    if (isTextLayerSelected()) {
+      return content[selectedLineIndex!].text;
     } else {
       return "";
     }
   }
 
   void setNewText(String text) {
-    if (checkExistIndex()) {
-      content[_selectedLineIndex!].text = text;
-    } else if (checkExistTitle()) {
-      title.text = text;
+    if (isTextLayerSelected()) {
+      content[selectedLineIndex!].text = text;
     }
 
     closeTextChangeOverlay();
@@ -142,53 +247,23 @@ class CartazViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void resetSelectedLineIndex() {
-    _selectedLineIndex = null;
-    _showToolbar = false;
-    notifyListeners();
-  }
-
   void resetAll() {
-    _selectTitle = null;
-    resetSelectedLineIndex();
-  }
-
-  void setSelectTitle() {
-    if (_showToolbar) {
-      _selectTitle = null;
-      _selectedLineIndex = null;
-    } else {
-      _selectTitle = true;
-      _selectedLineIndex = null;
-    }
-
-    toggleToolbar();
-
+    selectedLineIndex = null;
+    selectedLayerIndex = null;
+    mode = EditMode.initial;
     notifyListeners();
   }
 
   void setSelectedLineIndex(int? index) {
-    if (_selectTitle == true) {
-      toggleToolbar(false);
-      _selectedLineIndex = null;
-      _selectTitle = null;
-    } else if (_selectedLineIndex != null) {
-      _selectedLineIndex = null;
-      toggleToolbar(false);
-    } else {
-      _selectedLineIndex = index;
-      toggleToolbar(true);
-    }
+   if (selectedLineIndex != null) {
+      selectedLineIndex = null;
+      mode = EditMode.initial;
+   } else {
+      selectedLineIndex = index;
+      mode = EditMode.editStyleText;
+   }
 
     notifyListeners();
-  }
-
-  bool checkExistIndex() {
-    return (_selectedLineIndex != null && _selectedLineIndex! < content.length);
-  }
-
-  bool checkExistTitle() {
-    return (_selectTitle != null && _selectTitle!);
   }
 
   void addLine() {
@@ -199,12 +274,12 @@ class CartazViewModel extends ChangeNotifier {
   }
 
   void deleteLine() {
-    if (_selectedLineIndex != null &&
-        _selectedLineIndex! >= 0 &&
-        _selectedLineIndex! < model.content.length) {
-      model.content.removeAt(_selectedLineIndex!);
-      _selectedLineIndex = null;
-      _showToolbar = false;
+    if (selectedLineIndex != null &&
+        selectedLineIndex! >= 0 &&
+        selectedLineIndex! < model.content.length) {
+      model.content.removeAt(selectedLineIndex!);
+      selectedLineIndex = null;
+      mode = EditMode.initial;
       notifyListeners();
     }
   }
@@ -220,58 +295,41 @@ class CartazViewModel extends ChangeNotifier {
       FontWeight.w900,
     ];
 
-    if (checkExistIndex()) {
-      final current = content[_selectedLineIndex!].weight;
+    if (isTextLayerSelected()) {
+      final current = content[selectedLineIndex!].weight;
       final index = weights.indexOf(current);
       final nextWeight = (index + 1 < weights.length) ? weights[index + 1] : weights[0];
 
-      content[_selectedLineIndex!].weight = nextWeight;
-      notifyListeners();
-    } else if (checkExistTitle()) {
-      final current = title.weight;
-      final index = weights.indexOf(current);
-      final nextWeight = (index + 1 < weights.length) ? weights[index + 1] : weights[0];
-
-      title.weight = nextWeight;
+      content[selectedLineIndex!].weight = nextWeight;
       notifyListeners();
     }
   }
 
   void increaseText() {
-    if (checkExistIndex()) {
-      content[_selectedLineIndex!].size++;
-      notifyListeners();
-    } else if (checkExistTitle()){
-      title.size++;
+    if (isTextLayerSelected()) {
+      content[selectedLineIndex!].size++;
       notifyListeners();
     }
   }
 
   void decreaseText() {
-    if (checkExistIndex()) {
-      content[_selectedLineIndex!].size--;
-      notifyListeners();
-    } else if (checkExistTitle()){
-      title.size--;
+    if (isTextLayerSelected()) {
+      content[selectedLineIndex!].size--;
       notifyListeners();
     }
   }
 
   Alignment getAlignment() {
-    if (checkExistIndex()) {
-      return content[_selectedLineIndex!].align;
-    } else if (checkExistTitle()) {
-      return title.align;
+    if (isTextLayerSelected()) {
+      return content[selectedLineIndex!].align;
     }
     return Alignment.center;
   }
 
   void changeHorizontalAlign() {
     Alignment current;
-    if (checkExistIndex()) {
-      current = content[_selectedLineIndex!].align;
-    } else if (checkExistTitle()) {
-      current = title.align;
+    if (isTextLayerSelected()) {
+      current = content[selectedLineIndex!].align;
     } else {
       return;
     }
@@ -288,24 +346,20 @@ class CartazViewModel extends ChangeNotifier {
     }
 
 
-    if (checkExistIndex()) {
-      content[_selectedLineIndex!].align = Alignment(newHorizontal, horizontal);
-    } else if (checkExistTitle()) {
-      title.align = Alignment(newHorizontal, horizontal);
+    if (isTextLayerSelected()) {
+      content[selectedLineIndex!].align = Alignment(newHorizontal, horizontal);
     }
-      notifyListeners();
+
+    notifyListeners();
   }
 
   void changeVerticalAlign() {
      Alignment current;
-      if (checkExistIndex()) {
-        current = content[_selectedLineIndex!].align;
-      } else if (checkExistTitle()) {
-        current = title.align;
+      if (isTextLayerSelected()) {
+        current = content[selectedLineIndex!].align;
       } else {
         return;
       }
-
 
       final double vertical = current.x;
 
@@ -318,13 +372,28 @@ class CartazViewModel extends ChangeNotifier {
         newVertical = -1.0;
       }
 
-     if (checkExistIndex()) {
-       content[_selectedLineIndex!].align = Alignment(vertical, newVertical);
-     } else if (checkExistTitle()) {
-       title.align = Alignment(vertical, newVertical);
+     if (isTextLayerSelected()) {
+       content[selectedLineIndex!].align = Alignment(vertical, newVertical);
      }
 
       notifyListeners();
   }
 
+  void increaseHeight() {
+    final line = content[selectedLineIndex!];
+    for (var side in [IndexPaddings.top, IndexPaddings.bottom]) {
+      final current = line.padding[side.number];
+      line.setPaddingValue([side], current + step);
+    }
+    notifyListeners();
+  }
+
+  void decreaseHeight() {
+    final line = content[selectedLineIndex!];
+    for (var side in [IndexPaddings.top, IndexPaddings.bottom]) {
+      final current = line.padding[side.number];
+      line.setPaddingValue([side], (current - step).clamp(0, double.infinity));
+    }
+    notifyListeners();
+  }
 }

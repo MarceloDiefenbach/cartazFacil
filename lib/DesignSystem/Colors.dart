@@ -9,8 +9,10 @@ class LightColors {
   static const Color text = Colors.black;
   static const Color textInvert = Colors.white;
 
+  static const Color stroke = Colors.black;
+
   static const Color backgroundToolbar = Colors.white;
-  static const Color buttonToolbar = Colors.black12;
+  static const Color buttonToolbar = Color.fromRGBO(240, 240, 240, 1.0);
 }
 
 class DarkColors {
@@ -21,6 +23,8 @@ class DarkColors {
 
   static const Color text = Colors.black;
   static const Color textInvert = Colors.white;
+
+  static const Color stroke = Colors.white;
 
   static const Color backgroundToolbar = Colors.grey;
   static const Color buttonToolbar = Colors.grey;
@@ -36,6 +40,8 @@ class AppColors {
 
   static Color text = isDarkMode ? DarkColors.text : LightColors.text;
   static Color textInvert = isDarkMode ? DarkColors.textInvert : LightColors.textInvert;
+
+  static Color stroke = isDarkMode ? DarkColors.stroke : LightColors.stroke;
 
   static Color backgroundToolbar = isDarkMode ? DarkColors.backgroundToolbar : LightColors.backgroundToolbar;
   static Color buttonToolbar = isDarkMode ? DarkColors.buttonToolbar : LightColors.buttonToolbar;

@@ -85,6 +85,15 @@ class _TextChangeOverlayState extends State<TextChangeOverlay> {
                           fillColor: AppColors.background,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(AppBorderRadius.small),
+                            borderSide: BorderSide(color: AppColors.stroke),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(AppBorderRadius.small),
+                            borderSide: BorderSide(color: AppColors.stroke),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(AppBorderRadius.small),
+                            borderSide: BorderSide(color: AppColors.primary),
                           ),
                         ),
                       ),

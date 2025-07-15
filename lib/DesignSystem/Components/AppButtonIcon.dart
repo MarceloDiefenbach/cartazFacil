@@ -6,12 +6,14 @@ class AppButtonIcon extends StatelessWidget {
   final VoidCallback onPressed;
   final Color? color;
   final bool hasBackground;
+  final bool disable;
 
 
   const AppButtonIcon({
     super.key,
     required this.icon,
     required this.onPressed,
+    this.disable = false,
     this.color,
     this.hasBackground = true
   });
@@ -32,7 +34,7 @@ class AppButtonIcon extends StatelessWidget {
           children: [
             Icon(
               icon,
-              color: color ?? AppColors.text, // usa valor customizado ou padrão
+              color: color ?? AppColors.text.withAlpha(disable ? 100 : 255), // usa valor customizado ou padrão
               size: 30,
             ),
           ],
