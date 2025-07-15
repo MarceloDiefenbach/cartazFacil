@@ -1,8 +1,8 @@
 import 'package:cartazrapido/Features/Cartaz/CartazView.dart';
 import 'package:cartazrapido/Features/Cartaz/CartazViewModal.dart';
-import 'package:cartazrapido/Features/Home.dart';
+import 'package:cartazrapido/Features/Home/Home.dart';
 import 'package:cartazrapido/Initial/SplashScreen.dart';
-import 'package:cartazrapido/Service.dart';
+import 'package:cartazrapido/ManagerCartazes.dart';
 import 'package:cartazrapido/routes_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,8 +16,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<ManagerEncarte>(
-          create: (_) => ManagerEncarte(),
+        ChangeNotifierProvider<ManageCartazes>(
+          create: (_) {
+            final vm = ManageCartazes();
+            vm.initCartazes();
+            return vm;
+          },
         ),
         ChangeNotifierProvider<CartazViewModel>(
           create: (_) => CartazViewModel(),

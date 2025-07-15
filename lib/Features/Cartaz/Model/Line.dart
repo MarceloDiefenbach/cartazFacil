@@ -25,7 +25,7 @@ class Line {
     required this.size,
     this.align = Alignment.center,
     this.weight = FontWeight.normal,
-    this.padding = const [0.0, 0.0, 0.0, 0.0]
+    this.padding = const [0.0, 0.0, 0.0, 0.0],
   });
 
   Color get colorAsColor {
@@ -38,58 +38,64 @@ class Line {
     final top = padding[IndexPaddings.top.number];
     final right = padding[IndexPaddings.right.number];
     final bottom = padding[IndexPaddings.bottom.number];
+    return EdgeInsets.fromLTRB(left, top, right, bottom);
+  }
 
-    final horizontalTotal = left + right;
-    final verticalTotal = top + bottom;
+  /// ✅ Serialização
+  factory Line.fromJson(Map<String, dynamic> json) => Line(
+    text: json['text'],
+    color: json['color'],
+    size: json['size'].toDouble(),
+    align: _alignmentFromJson(json['align']),
+    weight: _fontWeightFromJson(json['weight']),
+    padding: List<double>.from(json['padding'].map((e) => e.toDouble())),
+  );
 
-    double resolveLeft = 0;
-    double resolveRight = 0;
-    double resolveTop = 0;
-    double resolveBottom = 0;
+  Map<String, dynamic> toJson() => {
+    'text': text,
+    'color': color,
+    'size': size,
+    'align': _alignmentToJson(align),
+    'weight': _fontWeightToJson(weight),
+    'padding': padding,
+  };
 
-    // Horizontal (x)
-    if (align.x <= -0.5) {
-      // Alinhado à esquerda → tudo no left
-      resolveLeft = horizontalTotal;
-      resolveRight = 0;
-    } else if (align.x >= 0.5) {
-      // Alinhado à direita → tudo no right
-      resolveLeft = 0;
-      resolveRight = horizontalTotal;
-    } else {
-      // Centralizado → divide igualmente
-      resolveLeft = horizontalTotal / 2;
-      resolveRight = horizontalTotal / 2;
-    }
-
-    // Vertical (y)
-    if (align.y <= -0.5) {
-      // Alinhado no topo → tudo no top
-      resolveTop = verticalTotal;
-      resolveBottom = 0;
-    } else if (align.y >= 0.5) {
-      // Alinhado na base → tudo no bottom
-      resolveTop = 0;
-      resolveBottom = verticalTotal;
-    } else {
-      // Centralizado → divide igualmente
-      resolveTop = verticalTotal / 2;
-      resolveBottom = verticalTotal / 2;
-    }
-
-    return EdgeInsets.fromLTRB(
-      resolveLeft,
-      resolveTop,
-      resolveRight,
-      resolveBottom,
-    );
+  // 🔁 Helpers para Alignment e FontWeight
+  static String _alignmentToJson(Alignment align) {
+    if (align == Alignment.centerLeft) return 'centerLeft';
+    if (align == Alignment.centerRight) return 'centerRight';
+    if (align == Alignment.topCenter) return 'topCenter';
+    if (align == Alignment.bottomCenter) return 'bottomCenter';
+    return 'center'; // padrão
   }
 
   void setPaddingValue(List<IndexPaddings> sides, double value) {
-    final updatedPadding = List<double>.from(padding);
-    for (final side in sides) {
-      updatedPadding[side.number] = value;
+    if (padding.length != 4) {
+      padding = List.filled(4, 0.0);
     }
-    padding = updatedPadding;
+    final updated = List<double>.from(padding);
+    for (final side in sides) {
+      updated[side.number] = value;
+    }
+    padding = updated;
   }
+
+  static Alignment _alignmentFromJson(String value) {
+    switch (value) {
+      case 'centerLeft':
+        return Alignment.centerLeft;
+      case 'centerRight':
+        return Alignment.centerRight;
+      case 'topCenter':
+        return Alignment.topCenter;
+      case 'bottomCenter':
+        return Alignment.bottomCenter;
+      default:
+        return Alignment.center;
+    }
+  }
+
+  static int _fontWeightToJson(FontWeight weight) => weight.index;
+
+  static FontWeight _fontWeightFromJson(int index) => FontWeight.values[index];
 }

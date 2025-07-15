@@ -1,9 +1,13 @@
 import 'dart:io';
 
 import 'package:cartazrapido/AdMob/AdHelper.dart';
+import 'package:cartazrapido/ManagerCartazes.dart';
 import 'package:cartazrapido/routes_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:provider/provider.dart';
+
+import '../Cartaz/CartazViewModal.dart';
 
 class HomeView extends StatefulWidget {
   @override
@@ -42,6 +46,8 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    final managerCatazes = context.watch<ManageCartazes>();
+    final cartazViewModal = context.watch<CartazViewModel>();
 
     return Material(
       child: SafeArea(
@@ -57,9 +63,15 @@ class _HomeViewState extends State<HomeView> {
                         textAlign: TextAlign.center),
                   ),
                   SizedBox(height: 24),
+                  Text(managerCatazes.listCartaz.length.toString()),
                   ElevatedButton(
                       child: Text("Montar um cartaz"),
                       onPressed: () {
+                        final cartaz = managerCatazes.createNewCartaz();
+
+                        if (cartaz != null)
+                          cartazViewModal.initModel(cartaz);
+
                         Navigator.pushNamed(
                           context,
                           AppRoute.cartaz.path,

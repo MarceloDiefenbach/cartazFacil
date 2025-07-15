@@ -17,32 +17,33 @@ class CartazViewModel extends ChangeNotifier {
   CartazViewModel();
 
   final double step = 3.0;
-  late CartazModel model = CartazModel(
-      proportion: 1,
-      backgroundColor: "30F010",
-      content: [
-        Line(text: "OFERTA", color: "000000", size: 70.0, weight: FontWeight.w900, padding: [0,20,0,20]),
-        Line(text: "BANANA NANICA", color: "000000", size: 25.0),
-        Line(text: "De: R\$ 10,40", color: "000000", size: 17.0),
-        Line(text: "Por: R\$ 3,99", color: "000000", size: 40.0, weight: FontWeight.w900),
-      ],
-      layers: [
-        LayerData(
-          color: "FF0000",
-          heightFraction: 0.2,
-          pattern: PatternBackgroundType.triangular,
-        ),
-        LayerData(
-          color: "FFFF00",
-          heightFraction: 0.4,
-          pattern: PatternBackgroundType.triangular,
-        ),
-        LayerData(
-          color: "FF0000",
-          heightFraction: 0.1,
-          pattern: PatternBackgroundType.solid,
-        ),
-      ]);
+  late CartazModel model;
+  // late CartazModel model = CartazModel(
+  //     proportion: 1,
+  //     backgroundColor: "30F010",
+  //     content: [
+  //       Line(text: "OFERTA", color: "000000", size: 70.0, weight: FontWeight.w900, padding: [0,20,0,20]),
+  //       Line(text: "BANANA NANICA", color: "000000", size: 25.0),
+  //       Line(text: "De: R\$ 10,40", color: "000000", size: 17.0),
+  //       Line(text: "Por: R\$ 3,99", color: "000000", size: 40.0, weight: FontWeight.w900),
+  //     ],
+  //     layers: [
+  //       LayerData(
+  //         color: "FF0000",
+  //         heightFraction: 0.2,
+  //         pattern: PatternBackgroundType.triangular,
+  //       ),
+  //       LayerData(
+  //         color: "FFFF00",
+  //         heightFraction: 0.4,
+  //         pattern: PatternBackgroundType.triangular,
+  //       ),
+  //       LayerData(
+  //         color: "FF0000",
+  //         heightFraction: 0.1,
+  //         pattern: PatternBackgroundType.solid,
+  //       ),
+  //     ]);
 
   EditMode mode = EditMode.initial;
 
@@ -53,7 +54,6 @@ class CartazViewModel extends ChangeNotifier {
   Color get backgroundColor => Color(int.parse('0xFF${model.backgroundColor}'));
   List<Line> get content => model.content;
   List<LayerData> get layers => model.layers;
-
 
   void initModel(CartazModel newModel) {
     model = newModel;
