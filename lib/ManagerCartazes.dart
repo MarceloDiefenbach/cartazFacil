@@ -80,8 +80,9 @@ class ManageCartazes extends ChangeNotifier {
     }
   }
 
-  void selectCartaz(int index) {
-    if (index >= 0 && index < listCartaz.length) {
+  void selectCartaz(CartazModel cartaz) {
+    final index = listCartaz.indexWhere((item) => item.id == cartaz.id);
+    if (index != -1) {
       selectedIndex = index;
       notifyListeners();
     }

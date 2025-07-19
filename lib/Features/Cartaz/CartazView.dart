@@ -12,6 +12,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:provider/provider.dart';
 
+import '../../ManagerCartazes.dart';
 import 'CartazViewModal.dart';
 import 'Components/Background/BackgroundCartaz.dart';
 import 'Components/LineWidget.dart';
@@ -142,6 +143,7 @@ class _CartazViewState extends State<CartazView> {
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<CartazViewModel>();
+    final managerCatazes = context.watch<ManageCartazes>();
 
     final screenSize = MediaQuery.of(context).size;
     final cartazSize = viewModel.calculateCartazSize(screenSize);
@@ -168,7 +170,11 @@ class _CartazViewState extends State<CartazView> {
               child: Container(
                 child: Column(
                   children: [
-                    NavigatorBar(onExport: () {
+                    NavigatorBar(
+                      onBack: () {
+                        managerCatazes.saveCartaz(viewModel.model);
+                      },
+                        onExport: () {
                       captureScreenshot().then((screenshot) {
                         saveImageAndShowDialog(context, screenshot);
                       });

@@ -9,18 +9,18 @@ class BackgroundCartaz extends StatefulWidget {
   final double height;
   final bool showLines;
   final int? selectedLayer;
-  final void Function(List<double> values) onConfirm;
-  final void Function(int? index) onSelectedLayer;
+  final void Function(List<double> values)? onConfirm;
+  final void Function(int? index)? onSelectedLayer;
 
   const BackgroundCartaz({
     super.key,
     required this.layers,
     required this.width,
     required this.height,
-    required this.showLines,
-    required this.selectedLayer,
-    required this.onConfirm,
-    required this.onSelectedLayer,
+    this.showLines = false,
+    this.selectedLayer,
+    this.onConfirm,
+    this.onSelectedLayer,
   });
 
   @override
@@ -61,20 +61,22 @@ class _BackgroundCartazState extends State<BackgroundCartaz> {
       final layer = widget.layers[i];
       final nextLayer = (i + 1 < widget.layers.length) ? widget.layers[i + 1] : widget.layers[i];
 
-      return GestureDetector(
-        onTap: () {
-          if (widget.showLines) {
-              widget.onSelectedLayer(i);
-          }
-        },
-        child: PatternBackground(
+      // return GestureDetector(
+      //   onTap: () {
+      //     if (widget.showLines) {
+      //         widget.onSelectedLayer?.call(i);
+      //     }
+      //   },
+      //   child:
+        return PatternBackground(
           color: layer.colorAsColor,
           background: nextLayer.colorAsColor,
           height: totalHeight * heights[i],
           pattern: layer.pattern,
           isSelected: (widget.selectedLayer == i),
-        ),
-      );
+        );
+      // );
+
     });
   }
 
@@ -93,7 +95,7 @@ class _BackgroundCartazState extends State<BackgroundCartaz> {
               final max = i == dragPositions.length - 1 ? 1.0 : dragPositions[i + 1] - 0.05;
 
               dragPositions[i] = dragPositions[i].clamp(min, max);
-              widget.onConfirm(dragPositions);
+              widget.onConfirm?.call(dragPositions);
             });
           },
           child: Column(

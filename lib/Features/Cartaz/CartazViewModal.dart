@@ -57,6 +57,9 @@ class CartazViewModel extends ChangeNotifier {
 
   void initModel(CartazModel newModel) {
     model = newModel;
+    mode = EditMode.initial;
+    selectedLineIndex = null;
+    selectedLayerIndex = null;
     notifyListeners();
   }
 

@@ -1,7 +1,7 @@
-import 'dart:io';
-
 import 'package:cartazrapido/AdMob/AdHelper.dart';
+import 'package:cartazrapido/Features/Home/Components/CartazMini.dart';
 import 'package:cartazrapido/ManagerCartazes.dart';
+import 'package:cartazrapido/Utils/ListWidgetExtentions.dart';
 import 'package:cartazrapido/routes_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -40,73 +40,77 @@ class _HomeViewState extends State<HomeView> {
     ).load();
   }
 
-  void openWebsite(String url) async {
-
-  }
+  void openWebsite(String url) async {}
 
   @override
   Widget build(BuildContext context) {
     final managerCatazes = context.watch<ManageCartazes>();
     final cartazViewModal = context.watch<CartazViewModel>();
+    final spacingElement = 12.0;
 
     return Material(
       child: SafeArea(
         child: Stack(
           children: [
-            Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 48),
-                    child: Text("Monte cartazes para usar em seu supermercado",
-                        textAlign: TextAlign.center),
-                  ),
-                  SizedBox(height: 24),
-                  Text(managerCatazes.listCartaz.length.toString()),
-                  ElevatedButton(
-                      child: Text("Montar um cartaz"),
-                      onPressed: () {
-                        final cartaz = managerCatazes.createNewCartaz();
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SingleChildScrollView(
+                child: LayoutBuilder(builder: (context, constrains) {
+                  final width =
+                      (constrains.maxWidth - (spacingElement * 2)) / 3;
+                  return Column(children: [
+                    ...managerCatazes.listCartaz
+                        .split(3)
+                        .map((pair) {
+                          return Row(
+                            children: pair
+                                .map((cartaz) => CartazMini(
+                                    width: width,
+                                    cartaz: cartaz,
+                                    onTap: () {
+                                      managerCatazes.selectCartaz(cartaz);
+                                      cartazViewModal.initModel(managerCatazes.selectedCartaz!);
 
-                        if (cartaz != null)
-                          cartazViewModal.initModel(cartaz);
-
-                        Navigator.pushNamed(
-                          context,
-                          AppRoute.cartaz.path,
-                        );
-                      }),
-                  SizedBox(height: 32),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 48),
-                    child: Text(
-                        "Nós também temos um aplicativo de montar encartes para redes sociais",
-                        textAlign: TextAlign.center),
-                  ),
-                  SizedBox(height: 32),
-               ElevatedButton(child: Text("Ver aplicativo de encartes"), onPressed: () {
-                 if (Platform.isAndroid) {
-                   openWebsite(
-                       "https://play.google.com/store/apps/details?id=com.marcelo.encarte_facil_2");
-                 } else {
-                   openWebsite(
-                       "https://apps.apple.com/us/app/encarte-f%C3%A1cil/id6443417835");
-                 }
-               },),
-
-                ],
+                                      Navigator.pushNamed(
+                                        context,
+                                        AppRoute.cartaz.path,
+                                      );
+                                    }))
+                                .toList()
+                                .withHorizontalSpacing(width: 12),
+                          );
+                        })
+                        .toList()
+                        .withVerticalSpacing(height: 16),
+                  ]);
+                }),
               ),
             ),
-            if (_bannerAd != null)
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  width: _bannerAd!.size.width.toDouble(),
-                  height: _bannerAd!.size.height.toDouble(),
-                  child: AdWidget(ad: _bannerAd!),
-                ),
-              ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: ElevatedButton(
+                  child: Text("Criar novo cartaz"),
+                  onPressed: () {
+                    final cartaz = managerCatazes.createNewCartaz();
+
+                    if (cartaz != null) cartazViewModal.initModel(cartaz);
+
+                    Navigator.pushNamed(
+                      context,
+                      AppRoute.cartaz.path,
+                    );
+                  }),
+            ),
+
+            // if (_bannerAd != null)
+            //   Align(
+            //     alignment: Alignment.bottomCenter,
+            //     child: Container(
+            //       width: _bannerAd!.size.width.toDouble(),
+            //       height: _bannerAd!.size.height.toDouble(),
+            //       child: AdWidget(ad: _bannerAd!),
+            //     ),
+            //   ),
           ],
         ),
       ),

@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import '../DesingSystem.dart';
 
 class NavigatorBar extends StatelessWidget {
+  final VoidCallback? onBack;
   final VoidCallback onExport;
+
 
   const NavigatorBar({
     super.key,
+    this.onBack,
     required this.onExport,
 
   });
@@ -25,7 +28,8 @@ class NavigatorBar extends StatelessWidget {
                 icon: Icons.chevron_left,
                 hasBackground: false,
                 onPressed: () {
-                   Navigator.pop(context);
+                  onBack?.call;
+                  Navigator.pop(context);
                 }
             ),
 
